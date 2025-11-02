@@ -1,205 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Huzeyfa's Study Organizer</title>
-  <style>
-    /* ===== Basic Styling ===== */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      text-align: center;
-      padding: 20px;
-      font-size: 2em;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    input, select, button {
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 1em;
-    }
-
-    input, select {
-      width: 60%;
-    }
-
-    button {
-      background-color: #ff9a9e;
-      color: #fff;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #fad0c4;
-      color: #000;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    li {
-      background: rgba(0,0,0,0.2);
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    li.completed {
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-
-    .day-section {
-      margin-top: 20px;
-    }
-
-    .subject {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .delete-btn {
-      background: #ff4d4d;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .delete-btn:hover {
-      background: #ff1a1a;
-    }
-
-    label {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huzeyfa's Weekly & Daily Planner</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    margin: 0;
+    color: #fff;
+  }
+  h1 {
+    text-align: center;
+    padding: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    border-radius: 8px;
+  }
+  th {
+    background: rgba(255,255,255,0.1);
+  }
+  td {
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  td.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  select {
+    padding: 5px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 10px;
+  }
+  #subjectSelect {
+    width: 200px;
+  }
+</style>
 </head>
 <body>
-  <h1>📚 Huzeyfa's Study Organizer</h1>
+<h1>📅 Huzeyfa's Weekly & Daily Planner</h1>
 
-  <div class="container">
-    <label for="daySelect">Day:</label>
-    <select id="daySelect">
-      <option value="Monday">Monday</option>
-      <option value="Tuesday">Tuesday</option>
-      <option value="Wednesday">Wednesday</option>
-      <option value="Thursday">Thursday</option>
-      <option value="Friday">Friday</option>
-      <option value="Saturday">Saturday</option>
-      <option value="Sunday">Sunday</option>
-    </select><br>
+<div class="container">
+  <label for="subjectSelect">Select Subject to Add:</label>
+  <select id="subjectSelect">
+    <option value="Math">Math</option>
+    <option value="English">English</option>
+    <option value="Physics">Physics</option>
+    <option value="Chemistry">Chemistry</option>
+    <option value="Biology">Biology</option>
+    <option value="History">History</option>
+    <option value="Geography">Geography</option>
+    <option value="ICT">ICT</option>
+    <option value="Physical Education">PE</option>
+    <option value="Economics">Economics</option>
+    <option value="Amharic">Amharic</option>
+  </select>
 
-    <label for="subjectSelect">Subject:</label>
-    <select id="subjectSelect">
-      <option value="Math">Math</option>
-      <option value="English">English</option>
-      <option value="Physics">Physics</option>
-      <option value="Chemistry">Chemistry</option>
-      <option value="Biology">Biology</option>
-      <option value="History">History</option>
-      <option value="Geography">Geography</option>
-      <option value="ICT">ICT</option>
-      <option value="Physical Education">PE</option>
-      <option value="Economics">Economics</option>
-      <option value="Amharic">Amharic</option>
-    </select><br>
+  <table>
+    <thead>
+      <tr>
+        <th>Time/Day</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+      </tr>
+    </thead>
+    <tbody id="scheduleBody">
+      <!-- Time slots will be inserted here -->
+    </tbody>
+  </table>
+</div>
 
-    <input type="text" id="taskInput" placeholder="Enter your task">
-    <button onclick="addTask()">➕ Add Task</button>
+<script>
+const scheduleBody = document.getElementById('scheduleBody');
+const subjects = document.getElementById('subjectSelect').options;
 
-    <div id="scheduleContainer"></div>
-  </div>
+const times = ["6:00-7:00", "7:00-8:00", "8:00-9:00", "9:00-10:00", "10:00-11:00", 
+               "11:00-12:00", "12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00"];
 
-  <script>
-    const scheduleContainer = document.getElementById('scheduleContainer');
+function createSchedule() {
+  times.forEach((time, rowIndex) => {
+    const tr = document.createElement('tr');
+    const timeCell = document.createElement('td');
+    timeCell.textContent = time;
+    tr.appendChild(timeCell);
 
-    const daysOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-    const schedule = {};
-
-    // Initialize empty schedule
-    daysOfWeek.forEach(day => schedule[day] = []);
-
-    function addTask() {
-      const day = document.getElementById('daySelect').value;
-      const subject = document.getElementById('subjectSelect').value;
-      const taskText = document.getElementById('taskInput').value.trim();
-      if(taskText === "") return;
-
-      const task = { text: taskText, subject: subject, done: false };
-      schedule[day].push(task);
-      document.getElementById('taskInput').value = '';
-      renderSchedule();
+    for(let day = 0; day < 7; day++) {
+      const td = document.createElement('td');
+      td.onclick = () => {
+        const subject = document.getElementById('subjectSelect').value;
+        if(td.textContent === subject) {
+          td.classList.toggle('completed');
+        } else {
+          td.textContent = subject;
+          td.classList.remove('completed');
+        }
+      };
+      tr.appendChild(td);
     }
 
-    function toggleTask(dayIndex, taskIndex) {
-      schedule[daysOfWeek[dayIndex]][taskIndex].done = !schedule[daysOfWeek[dayIndex]][taskIndex].done;
-      renderSchedule();
-    }
+    scheduleBody.appendChild(tr);
+  });
+}
 
-    function deleteTask(dayIndex, taskIndex) {
-      schedule[daysOfWeek[dayIndex]].splice(taskIndex, 1);
-      renderSchedule();
-    }
-
-    function renderSchedule() {
-      scheduleContainer.innerHTML = '';
-      daysOfWeek.forEach((day, dayIndex) => {
-        const daySection = document.createElement('div');
-        daySection.className = 'day-section';
-        const dayTitle = document.createElement('h2');
-        dayTitle.textContent = day;
-        daySection.appendChild(dayTitle);
-
-        const ul = document.createElement('ul');
-
-        schedule[day].forEach((task, taskIndex) => {
-          const li = document.createElement('li');
-          li.className = task.done ? 'completed' : '';
-          li.innerHTML = `<span class="subject">${task.subject}:</span> ${task.text} <button class="delete-btn" onclick="deleteTask(${dayIndex}, ${taskIndex})">🗑</button>`;
-          li.onclick = (e) => {
-            if(e.target.tagName !== 'BUTTON') toggleTask(dayIndex, taskIndex);
-          };
-          ul.appendChild(li);
-        });
-
-        daySection.appendChild(ul);
-        scheduleContainer.appendChild(daySection);
-      });
-    }
-
-    renderSchedule();
-  </script>
+createSchedule();
+</script>
 </body>
 </html>
