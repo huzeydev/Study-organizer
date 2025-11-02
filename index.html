@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>my Weekly & Daily Planner</title>
+<title>Huzeyfa's Study Assistant</title>
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(to right, #6a11cb, #2575fc);
-    margin: 0;
     color: #fff;
+    margin: 0;
+    padding: 0;
   }
   h1 {
     text-align: center;
@@ -23,6 +24,11 @@
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    margin-bottom: 40px;
+  }
+  h2 {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 5px;
   }
   table {
     width: 100%;
@@ -47,22 +53,72 @@
     text-decoration: line-through;
     opacity: 0.6;
   }
-  select {
-    padding: 5px;
+  select, input, button, textarea {
+    padding: 8px;
     border-radius: 6px;
     border: none;
-    margin-bottom: 10px;
+    margin: 5px 0;
+    font-size: 1em;
   }
-  #subjectSelect {
-    width: 200px;
+  button {
+    background-color: #ff9a9e;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background-color: #fad0c4;
+    color: #000;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  li {
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  li.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  .delete-btn {
+    background: #ff4d4d;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+  }
+  .delete-btn:hover {
+    background: #ff1a1a;
+  }
+  label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
   }
 </style>
 </head>
 <body>
-<h1>📅 My Weekly & Daily Planner</h1>
+
+<h1>📚 Huzeyfa's Study Assistant</h1>
 
 <div class="container">
-  <label for="subjectSelect">Select Subject to Add:</label>
+  <h2>1️⃣ Weekly & Daily Schedule</h2>
+  <label for="subjectSelect">Select Subject:</label>
   <select id="subjectSelect">
     <option value="Math">Math</option>
     <option value="English">English</option>
@@ -90,44 +146,107 @@
         <th>Sunday</th>
       </tr>
     </thead>
-    <tbody id="scheduleBody">
-      <!-- Time slots will be inserted here -->
-    </tbody>
+    <tbody id="scheduleBody"></tbody>
   </table>
 </div>
 
+<div class="container">
+  <h2>2️⃣ Notes</h2>
+  <textarea id="notes" placeholder="Write your notes here..."></textarea>
+  <button onclick="saveNotes()">💾 Save Notes</button>
+  <p id="notesSaved" style="color: #a0ffa0;"></p>
+</div>
+
+<div class="container">
+  <h2>3️⃣ Tasks & To-Do</h2>
+  <input type="text" id="taskInput" placeholder="Add a task">
+  <button onclick="addTask()">➕ Add Task</button>
+  <ul id="taskList"></ul>
+</div>
+
+<div class="container">
+  <h2>4️⃣ Reminders</h2>
+  <input type="text" id="reminderInput" placeholder="Add reminder">
+  <input type="time" id="reminderTime">
+  <button onclick="addReminder()">⏰ Add Reminder</button>
+  <ul id="reminderList"></ul>
+</div>
+
 <script>
-const scheduleBody = document.getElementById('scheduleBody');
-const subjects = document.getElementById('subjectSelect').options;
+  // --- Schedule ---
+  const scheduleBody = document.getElementById('scheduleBody');
+  const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const times = ["6:00-7:00","7:00-8:00","8:00-9:00","9:00-10:00","10:00-11:00",
+                 "11:00-12:00","12:00-13:00","13:00-14:00","14:00-15:00","15:00-16:00"];
+  const schedule = {};
 
-const times = ["6:30-7:15", "10:40-10:55", "13:40-13:55", "15:35-16:35", "16:35-17:35", "19:15-22:00"];
+  days.forEach(day => schedule[day] = Array(times.length).fill(""));
 
-function createSchedule() {
-  times.forEach((time, rowIndex) => {
-    const tr = document.createElement('tr');
-    const timeCell = document.createElement('td');
-    timeCell.textContent = time;
-    tr.appendChild(timeCell);
+  function createSchedule() {
+    times.forEach((time,rowIndex) => {
+      const tr = document.createElement('tr');
+      const timeCell = document.createElement('td');
+      timeCell.textContent = time;
+      tr.appendChild(timeCell);
+      for(let dayIndex=0; dayIndex<7; dayIndex++){
+        const td = document.createElement('td');
+        td.onclick = () => {
+          const subject = document.getElementById('subjectSelect').value;
+          if(td.textContent === subject){
+            td.classList.toggle('completed');
+          } else {
+            td.textContent = subject;
+            td.classList.remove('completed');
+            schedule[days[dayIndex]][rowIndex] = subject;
+          }
+        };
+        tr.appendChild(td);
+      }
+      scheduleBody.appendChild(tr);
+    });
+  }
 
-    for(let day = 0; day < 7; day++) {
-      const td = document.createElement('td');
-      td.onclick = () => {
-        const subject = document.getElementById('subjectSelect').value;
-        if(td.textContent === subject) {
-          td.classList.toggle('completed');
-        } else {
-          td.textContent = subject;
-          td.classList.remove('completed');
-        }
-      };
-      tr.appendChild(td);
-    }
+  createSchedule();
 
-    scheduleBody.appendChild(tr);
-  });
-}
+  // --- Notes ---
+  function saveNotes(){
+    const notes = document.getElementById('notes').value;
+    localStorage.setItem('myNotes', notes);
+    document.getElementById('notesSaved').textContent = "Notes saved!";
+    setTimeout(()=>{document.getElementById('notesSaved').textContent='';}, 2000);
+  }
+  document.getElementById('notes').value = localStorage.getItem('myNotes') || "";
 
-createSchedule();
+  // --- Tasks ---
+  const taskList = document.getElementById('taskList');
+  function addTask(){
+    const input = document.getElementById('taskInput');
+    if(input.value === '') return;
+    const li = document.createElement('li');
+    li.textContent = input.value;
+    li.onclick = () => li.classList.toggle('completed');
+    const del = document.createElement('button');
+    del.className = 'delete-btn';
+    del.textContent = '🗑';
+    del.onclick = (e)=>{li.remove(); e.stopPropagation();};
+    li.appendChild(del);
+    taskList.appendChild(li);
+    input.value = '';
+  }
+
+  // --- Reminders ---
+  const reminderList = document.getElementById('reminderList');
+  function addReminder(){
+    const input = document.getElementById('reminderInput');
+    const timeInput = document.getElementById('reminderTime');
+    if(input.value === '' || timeInput.value==='') return;
+    const li = document.createElement('li');
+    li.textContent = `${timeInput.value} - ${input.value}`;
+    reminderList.appendChild(li);
+    input.value = '';
+    timeInput.value = '';
+  }
+
 </script>
 </body>
 </html>
